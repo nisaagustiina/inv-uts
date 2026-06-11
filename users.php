@@ -106,7 +106,7 @@ function page_url(int $p): string
     <?php if ($total_pages > 1): ?>
         <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid #e2e8f0;">
             <div style="font-size:13px;color:#64748b;">
-                Showing <strong><?php echo $offset + 1; ?>–<?php echo min($offset + $per_page, $total_items); ?></strong>
+                Showing <strong><?php echo $offset + 1; ?>-<?php echo min($offset + $per_page, $total_items); ?></strong>
                 of <strong><?php echo $total_items; ?></strong> items
             </div>
             <nav>

@@ -17,15 +17,16 @@ if (!$user) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name     = trim($_POST['name']);
-    $username     = trim($_POST['username']);
+    $username = trim($_POST['username']);
     $email    = trim($_POST['email']);
     $role     = $_POST['role'];
     $password = $_POST['password'];
 
-    $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ? OR email = ? AND id != ?");
+    $stmt = $pdo->prepare("SELECT id FROM users WHERE (username = ? OR email = ?) AND id != ?");
     $stmt->execute([$username, $email, $id]);
+
     if ($stmt->fetch()) {
-        $_SESSION['error'] = "Email or Username already used by another user!";
+        $_SESSION['error'] = "Username or Email already used by another user!";
         header("Location: edit_user.php?id=$id");
         exit();
     }
@@ -35,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare("UPDATE users SET name=?, username=?, email=?, password=?, role=? WHERE id=?");
         $stmt->execute([$name, $username, $email, $hashed, $role, $id]);
     } else {
-        $stmt = $pdo->prepare("UPDATE users SET name=?,username=?, email=?, role=? WHERE id=?");
+        $stmt = $pdo->prepare("UPDATE users SET name=?, username=?, email=?, role=? WHERE id=?");
         $stmt->execute([$name, $username, $email, $role, $id]);
     }
 

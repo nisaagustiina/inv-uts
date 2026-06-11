@@ -1,5 +1,5 @@
 <?php
-$host = '127.0.0.1';
+$host = '127.0.0.1';//localhost
 $dbname = 'inventory_db';
 $username = 'root';
 $password = '';

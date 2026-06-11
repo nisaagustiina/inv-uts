@@ -8,6 +8,17 @@ if ($_SESSION['role'] !== 'admin') {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name']);
+
+    //check
+    $check = $pdo->prepare("SELECT * FROM categories WHERE name = ?");
+    $check->execute([$name]);
+
+    if ($check->fetch()) {
+        $_SESSION['error'] = "Category has already existed!";
+        header("Location: add_category.php");
+        exit();
+    }
+
     $stmt = $pdo->prepare("INSERT INTO categories (name) VALUES (?)");
     $stmt->execute([$name]);
     $_SESSION['message'] = "Category added successfully!";
