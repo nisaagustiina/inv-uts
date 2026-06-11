@@ -47,7 +47,7 @@ function page_url(int $p): string
     <?php endif; ?>
 </div>
 
-<div class="table-card">
+<div class="table-card table-responsive">
     <table class="table table-hover">
         <thead>
             <tr>

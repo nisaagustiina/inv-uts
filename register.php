@@ -1,3 +1,27 @@
+<?php
+require_once 'config/db.php';
+$error = '';
+$success = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['email'] ?? '');
+    $username = trim($_POST['username'] ?? '');
+    $password = $_POST['password'];
+    $status   = $_POST['status'];
+
+    $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
+    $stmt->execute([$username, $email]);
+    if ($stmt->fetch()) {
+        $error = "Username or email already registered.";
+    } else {
+        $hashed = password_hash($password, PASSWORD_DEFAULT);
+        $stmt = $pdo->prepare("INSERT INTO users (name, username, email, password, role) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute([$username, $username, $email, $hashed, $status]);
+        $success = "Account created! You can now log in.";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -165,12 +189,26 @@
             <h5>Register</h5>
             <p>Fill in the details below to get started</p>
 
+            <?php if ($error): ?>
+                <div class="alert alert-danger mb-3"><i class="bi bi-exclamation-circle me-1"></i><?php echo $error; ?></div>
+            <?php endif; ?>
+            <?php if ($success): ?>
+                <div class="alert alert-success mb-3"><i class="bi bi-check-circle me-1"></i><?php echo $success; ?></div>
+            <?php endif; ?>
+
             <form action="" method="post">
                 <div class="mb-3">
                     <label class="form-label">Username</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-envelope"></i></span>
                         <input type="username" name="username" class="form-control" placeholder="username" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                        <input type="email" name="email" class="form-control" placeholder="email" required>
                     </div>
                 </div>
                 <div class="mb-3">

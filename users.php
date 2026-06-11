@@ -47,7 +47,7 @@ function page_url(int $p): string
     </a>
 </div>
 
-<div class="table-card">
+<div class="table-card table-responsive">
     <table class="table table-hover">
         <thead>
             <tr>
